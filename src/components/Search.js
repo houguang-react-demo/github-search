@@ -1,26 +1,40 @@
 import React, {Component} from 'react';
-import axios from "axios";
 import pubSub from "pubsub-js";
 
 class Search extends Component {
 
     wordRef = React.createRef()
-    getData = () => {
+    getData = async () => {
         //双重解构并且重命名
-        const {value:word} = this.wordRef.current;
-        pubSub.publish("users",{isLoading: true})
-        axios.get(`https://api.github.com/search/users?q=${word}`).then(
-            res=>{
-                pubSub.publish("users",{
-                    users:res.data.items,
-                    isLoading: false,
-                    isFirst: false
-                })
-            },
-            err=>{
-                pubSub.publish("users",{err:err.message})
-            }
-        )
+        const {value: word} = this.wordRef.current;
+        pubSub.publish("users", {isLoading: true})
+
+        //使用axios发送请求
+        // axios.get(`https://api.github.com/search/users?q=${word}`).then(
+        //     res=>{
+        //         pubSub.publish("users",{
+        //             users:res.data.items,
+        //             isLoading: false,
+        //             isFirst: false
+        //         })
+        //     },
+        //     err=>{
+        //         pubSub.publish("users",{err:err.message})
+        //     }
+        // )
+
+        //使用fetch发送请求
+        try {
+            const res = await fetch(`https://api.github.com/search/users?q=${word}`)
+            const data = await res.json()
+            pubSub.publish("users", {
+                users: data.items,
+                isLoading: false,
+                isFirst: false
+            })
+        } catch (e) {
+            pubSub.publish("users", {err: e.message,isLoading: false})
+        }
     }
 
     render() {
