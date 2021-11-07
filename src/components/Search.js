@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import pubSub from "pubsub-js";
 
 class Search extends Component {
 
@@ -7,19 +8,17 @@ class Search extends Component {
     getData = () => {
         //双重解构并且重命名
         const {value:word} = this.wordRef.current;
-        this.props.setUserState({isLoading: true})
+        pubSub.publish("users",{isLoading: true})
         axios.get(`https://api.github.com/search/users?q=${word}`).then(
             res=>{
-                console.log(res.data);
-                this.props.setUserState({
+                pubSub.publish("users",{
                     users:res.data.items,
                     isLoading: false,
                     isFirst: false
                 })
             },
             err=>{
-                console.log(err)
-                this.props.setUserState({err:err.message})
+                pubSub.publish("users",{err:err.message})
             }
         )
     }

@@ -3,17 +3,17 @@ import './item.css'
 
 class Item extends Component {
     render() {
-        console.log(this.props.user)
+        const {html_url,avatar_url,login} = this.props.user
         return (
             <div className="card">
-                <a href={this.props.user.html_url} target="_blank" rel="noreferrer">
+                <a href={html_url} target="_blank" rel="noreferrer">
                     <img
-                        src={this.props.user.avatar_url}
+                        src={avatar_url}
                         alt=""
                         style={{width: "100px"}}
                     />
                 </a>
-                <p className="card-text">{this.props.user.login}</p>
+                <p className="card-text">{login}</p>
             </div>
         );
     }
