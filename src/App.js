@@ -1,25 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
+import Search from "./components/Search";
+import List from "./components/List";
+import {useState} from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const init = {
+        users: [],
+        isFirst: true,
+        isLoading:false,
+        err:''
+    }
+    const [userState, setUserState] = useState(init);
+    return (
+        <div className="container">
+            <Search setUserState={setUserState}/>
+            <List users={userState}/>
+        </div>
+    );
 }
 
 export default App;
