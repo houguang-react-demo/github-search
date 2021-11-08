@@ -33,8 +33,10 @@ class Search extends Component {
             pubSub.publish("users", {
                 users: data.items,
                 isLoading: false,
+                err:''
             })
         } catch (e) {
+            console.log(e)
             pubSub.publish("users", {err: e.message, isLoading: false})
         }
     }
