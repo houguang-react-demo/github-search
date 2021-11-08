@@ -7,7 +7,10 @@ class Search extends Component {
     getData = async () => {
         //双重解构并且重命名
         const {value: word} = this.wordRef.current;
-        pubSub.publish("users", {isLoading: true})
+        pubSub.publish("users", {
+            isLoading: true,
+            isFirst: false
+        })
 
         //使用axios发送请求
         // axios.get(`https://api.github.com/search/users?q=${word}`).then(
@@ -30,10 +33,9 @@ class Search extends Component {
             pubSub.publish("users", {
                 users: data.items,
                 isLoading: false,
-                isFirst: false
             })
         } catch (e) {
-            pubSub.publish("users", {err: e.message,isLoading: false})
+            pubSub.publish("users", {err: e.message, isLoading: false})
         }
     }
 
